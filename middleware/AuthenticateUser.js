@@ -15,6 +15,7 @@ export async function authenticate(req, res, next) {
         const token = headerToken.split(' ')[1]
         const decoded = await admin.auth().verifyIdToken(token)
         if (decoded) {
+            req.user = decoded
             return next()
         }
         res.status(401).send('unauthorized')
