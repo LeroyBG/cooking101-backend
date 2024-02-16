@@ -33,6 +33,5 @@ export const recipeSchema = Joi.object({
 
     // private stuff, not sure how necessary
     creator: Joi.string().required(), // should be an id
-    id: Joi.string().required(),
     // maybe something to store id of people who liked/starred
 })
