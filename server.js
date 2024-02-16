@@ -1,26 +1,23 @@
+import dotenv from 'dotenv'
 import express from "express"
 import cors from 'cors'
-import dotenv from 'dotenv'
-import { applicationDefault, initializeApp } from "firebase-admin/app"
+import userRouter from './routes/users.js'
+
 
 // configure environment variables
 dotenv.config()
 const PORT = process.env.PORT ?? 3005
-const DATABASE_URL = process.env.DATABASE_URL
 
 // initialize express app
 const app = express()
 app.use(cors())
+app.use(express.json())
 
-// initialize firebase app
-initializeApp({
-    credential: applicationDefault(),
-    databaseURL: DATABASE_URL
-})
-
-app.use('/', (req, res) => {
+app.all('/', (req, res) => {
     res.send('Hi!')
 })
+
+app.use('/users', userRouter)
 
 app.listen(PORT, 
 () => {
@@ -28,3 +25,4 @@ app.listen(PORT,
 }).on('error', (e) => {
     console.log(e)
 })
+
