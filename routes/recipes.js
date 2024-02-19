@@ -1,12 +1,25 @@
 import express from "express";
 
-import { authenticate } from "../middleware/AuthenticateUser";
-import { recipeSchema } from "../schema/recipe";
-import { db } from "../config/firebase-config";
+import { authenticate } from "../middleware/AuthenticateUser.js";
+import { recipeSchema } from "../schema/recipe.js";
+import { db } from "../config/firebase-config.js";
 
 const router = express.Router()
 
-// router.use(authenticate)
+// make a dummy write to db to make sure connection is stable
+router.get('/test', async (req, res, next) => {
+    try {
+        await db.collection('recipes').add({
+            name: 'Test'
+        })
+        res.sendStatus(200)
+    } catch (err) {
+        console.log(err)
+        res.status(500).send(err)
+    }
+})
+
+router.use(authenticate)
 
 // post a recipe belonging to the requesting user
 router.post('/', async (req, res, next) => {
@@ -40,3 +53,5 @@ router.get('/mine', async (req, res, next) => {
         return
     }
 })
+
+export default router
