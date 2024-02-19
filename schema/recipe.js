@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { stepSchema } from './step'
+import { stepSchema } from './step.js'
 
 export const recipeSchema = Joi.object({
     title: Joi.string()
@@ -18,7 +18,7 @@ export const recipeSchema = Joi.object({
         [
             Joi.number(),
             Joi.array().length(2).items(Joi.number())
-        ].required() // i wonder if this will work...
+        ] // todo: make one of these required
     ],
     yield: Joi.number(),
     notes: Joi.string()
