@@ -1,7 +1,10 @@
 import dotenv from 'dotenv'
 import express from "express"
 import cors from 'cors'
+import morgan from 'morgan'
+
 import userRouter from './routes/users.js'
+import recipeRouter from './routes/recipes.js'
 
 
 // configure environment variables
@@ -12,12 +15,14 @@ const PORT = process.env.PORT ?? 3005
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(morgan('dev'))
 
 app.all('/', (req, res) => {
     res.send('Hi!')
 })
 
 app.use('/users', userRouter)
+app.use('/recipes', recipeRouter)
 
 app.listen(PORT, 
 () => {
