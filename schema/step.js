@@ -1,3 +1,5 @@
+import Joi from 'joi'
+
 export const stepSchema = Joi.object({
     description: Joi.string()
         .min(0, 'utf-8')
