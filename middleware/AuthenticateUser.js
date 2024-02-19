@@ -1,4 +1,4 @@
-import admin from 'firebase-admin'
+import {getAuth} from 'firebase-admin/auth'
 
 // verify firebase JWT token
 export async function authenticate(req, res, next) {
@@ -13,7 +13,7 @@ export async function authenticate(req, res, next) {
             return
         }
         const token = headerToken.split(' ')[1]
-        const decoded = await admin.auth().verifyIdToken(token)
+        const decoded = await getAuth().verifyIdToken(token)
         if (decoded) {
             req.user = decoded
             return next()
