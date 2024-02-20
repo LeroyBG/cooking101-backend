@@ -3,6 +3,7 @@ import express from "express";
 import { authenticate } from "../middleware/AuthenticateUser.js";
 import { recipeSchema } from "../schema/recipe.js";
 import { db } from "../config/firebase-config.js";
+import { createDefaultCookbooks } from "../middleware/createDefaultCookbooks.js";
 
 const router = express.Router()
 
@@ -20,14 +21,37 @@ router.get('/test', async (req, res, next) => {
 })
 
 router.use(authenticate)
+router.use(createDefaultCookbooks)
 
 // post a recipe belonging to the requesting user
-router.post('/', async (req, res, next) => {
+router.post('/create', async (req, res, next) => {
     try {
         const newRecipe = req.body
-        newRecipe.creator = req.user
+        newRecipe.creator = req.user.uid
+        
+        // validate
         await recipeSchema.validateAsync(newRecipe)
-        await db.collection('recipes').add(newRecipe)
+
+        // create recipe
+        const newRecipeRef = await db.collection('recipes').add(newRecipe)
+        
+        // add recipe to user's 'Originals' cookbook
+        let userOriginals = await db.collection('cookbooks')
+            .where('owner', '==', req.user.uid).where('name', '==', 'Originals').get()
+        
+        if (userOriginals.empty) {
+            throw new Error("Users should always have an 'Originals' cookbook")
+        }
+        
+        // userOriginals should be an array of size 1 
+        // because each user should only have 1 'originals' doc
+        userOriginals = userOriginals[0]
+        await db.collection('cookbooks').doc(userOriginals.id).update({
+            recipes: userOriginals.recipes + [newRecipeRef.id]
+        })
+        
+        res.sendStatus(201)
+        return
     } catch (err) {
         if (err.isJoi && err.name === 'ValidationError') {
             console.log(err)

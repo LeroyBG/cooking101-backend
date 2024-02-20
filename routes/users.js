@@ -8,6 +8,7 @@ import { userSchema } from '../schema/user.js'
 
 const router = express.Router()
 
+// this should never be used because user creation is handled by firebase, but it's a good reference
 router.post('/', async (req, res, next) => {
     try {
         const candidate = {
