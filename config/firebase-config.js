@@ -6,7 +6,7 @@ import { getFirestore } from 'firebase-admin/firestore'
 admin.initializeApp({
   credential: applicationDefault(),
   databaseURL: process.env.DATABASE_URL,
-  projectId: 'cooking101-3b0b8'
+  projectId: process.env.FIREBASE_PROJECT_ID
 });
 
 export const db = getFirestore()

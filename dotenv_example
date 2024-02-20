@@ -1,3 +1,4 @@
 PORT=3005
 GOOGLE_APPLICATION_CREDENTIALS="path-to-serviceAccount.json"
 DATABASE_URL=https://<database-name>.firebaseio.com
+FIREBASE_PROJECT_ID=<your firebase project id>
