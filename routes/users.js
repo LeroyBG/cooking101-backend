@@ -43,8 +43,8 @@ router.post('/', async (req, res, next) => {
             }
         }
 
-        cookbookSchema.validateAsync(newCookbooks.originals)
-        cookbookSchema.validateAsync(newCookbooks.favorites)
+        await cookbookSchema.validateAsync(newCookbooks.originals)
+        await cookbookSchema.validateAsync(newCookbooks.favorites)
 
         await db.collection('cookbooks').add(newCookbooks.originals)
         await db.collection('cookbooks').add(newCookbooks.favorites)
