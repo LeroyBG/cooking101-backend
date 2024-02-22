@@ -2,7 +2,7 @@
 but since i can't create them when the users are initialized on frontend,
 every time the server receives a request, we check if their cookbooks
 have been initialized and if not, initialize them */
-import { db } from "../config/firebase-config"
+import { db } from "../config/firebase-config.js"
 export const createDefaultCookbooks = async (req, res, next) => {
     try {
         if (!req.user) {
