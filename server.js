@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import express from "express"
 import cors from 'cors'
 import morgan from 'morgan'
+import path from 'node:path'
 
 import userRouter from './routes/users.js'
 import recipeRouter from './routes/recipes.js'
