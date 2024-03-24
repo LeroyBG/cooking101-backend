@@ -7,8 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "devStart": "nodemon server.js",
-    "prepare": "husky"
+    "devStart": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -22,11 +21,6 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "husky": "^9.0.11",
-    "lint-staged": {
-      "**/*": "prettier --write --ignore-unknown"
-    },
-    "nodemon": "^3.0.3",
-    "prettier": "3.2.5"
+    "nodemon": "^3.0.3"
   }
 }
