@@ -1,67 +1,67 @@
-import { getAuth } from 'firebase-admin/auth'
-import express, { Router }  from 'express'
-import Joi from 'joi'
-import { db } from '../config/firebase-config.js'
+import { getAuth } from "firebase-admin/auth";
+import express, { Router } from "express";
+import Joi from "joi";
+import { db } from "../config/firebase-config.js";
 
-import { cookbookSchema } from '../schema/cookbook.js'
-import { userSchema } from '../schema/user.js'
+import { cookbookSchema } from "../schema/cookbook.js";
+import { userSchema } from "../schema/user.js";
 
-const router = express.Router()
+const router = express.Router();
 
 // this should never be used because user creation is handled by firebase, but it's a good reference
-router.post('/', async (req, res, next) => {
-    try {
-        const candidate = {
-            name: req.body.userName,
-            password: req.body.password,
-        }
-    
-        // validate req
-        // right now, username and password are just unconstrained strings
-        await Joi.string().validateAsync(candidate.name)
-        await Joi.string().validateAsync(candidate.password)
+router.post("/", async (req, res, next) => {
+  try {
+    const candidate = {
+      name: req.body.userName,
+      password: req.body.password,
+    };
 
-        await userSchema.validateAsync(candidate)
+    // validate req
+    // right now, username and password are just unconstrained strings
+    await Joi.string().validateAsync(candidate.name);
+    await Joi.string().validateAsync(candidate.password);
 
-        const auth = getAuth()
+    await userSchema.validateAsync(candidate);
 
-        const newUser = await auth.createUser({
-            displayName: candidate.name,
-            password: candidate.password
-        })
+    const auth = getAuth();
 
-        const newCookbooks = {
-            originals: {
-                owner: newUser.uid,
-                name: 'Originals',
-                recipes: []
-            },
-            favorites: {
-                owner: newUser.uid,
-                name: 'Favorites',
-                recipes: []
-            }
-        }
+    const newUser = await auth.createUser({
+      displayName: candidate.name,
+      password: candidate.password,
+    });
 
-        await cookbookSchema.validateAsync(newCookbooks.originals)
-        await cookbookSchema.validateAsync(newCookbooks.favorites)
+    const newCookbooks = {
+      originals: {
+        owner: newUser.uid,
+        name: "Originals",
+        recipes: [],
+      },
+      favorites: {
+        owner: newUser.uid,
+        name: "Favorites",
+        recipes: [],
+      },
+    };
 
-        await db.collection('cookbooks').add(newCookbooks.originals)
-        await db.collection('cookbooks').add(newCookbooks.favorites)
+    await cookbookSchema.validateAsync(newCookbooks.originals);
+    await cookbookSchema.validateAsync(newCookbooks.favorites);
 
-        res.sendStatus(201)
-        return
-    } catch (err) {
-        if (err.isJoi && err.name === 'ValidationError') {
-            console.log(err)
-            res.status(400).send('invalid request')
-            return
-        }
+    await db.collection("cookbooks").add(newCookbooks.originals);
+    await db.collection("cookbooks").add(newCookbooks.favorites);
 
-        res.status(500).send('err')
-        console.log(err)
-        return
+    res.sendStatus(201);
+    return;
+  } catch (err) {
+    if (err.isJoi && err.name === "ValidationError") {
+      console.log(err);
+      res.status(400).send("invalid request");
+      return;
     }
-})
 
-export default router
+    res.status(500).send("err");
+    console.log(err);
+    return;
+  }
+});
+
+export default router;
