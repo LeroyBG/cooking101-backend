@@ -24,4 +24,12 @@ create a file called `.env` containing the information listed in dotenv_example
 
 ## Running  
 
-1. run `$npm start`
+*Note: This project must be run from its root directory (Same directory as script.js)*  
+
+### Production  
+
+1. run `$npm start`  
+
+### Development  
+
+1. run `$npm run devStart`  

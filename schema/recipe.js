@@ -6,7 +6,6 @@ export const recipeSchema = Joi.object({
         .min(2, 'utf-8')
         .max(100, 'utf-8')
         .required(),
-    image: Joi.any(),
     ingredients: Joi.array()
         .required()
         .items(Joi.string() // validate ingredients themselves
@@ -35,3 +34,5 @@ export const recipeSchema = Joi.object({
     creator: Joi.string().required(), // should be an id
     // maybe something to store id of people who liked/starred
 })
+
+export const recipeImageSchema = Joi.string().base64()
