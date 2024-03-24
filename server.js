@@ -18,16 +18,16 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 app.all("/", (req, res) => {
-  res.send("Hi!");
+	res.send("Hi!");
 });
 
 app.use("/users", userRouter);
 app.use("/recipes", recipeRouter);
 
 app
-  .listen(PORT, () => {
-    console.log(`server running on port, ${PORT}`);
-  })
-  .on("error", (e) => {
-    console.log(e);
-  });
+	.listen(PORT, () => {
+		console.log(`server running on port, ${PORT}`);
+	})
+	.on("error", (e) => {
+		console.log(e);
+	});

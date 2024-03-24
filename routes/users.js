@@ -10,58 +10,58 @@ const router = express.Router();
 
 // this should never be used because user creation is handled by firebase, but it's a good reference
 router.post("/", async (req, res, next) => {
-  try {
-    const candidate = {
-      name: req.body.userName,
-      password: req.body.password,
-    };
+	try {
+		const candidate = {
+			name: req.body.userName,
+			password: req.body.password
+		};
 
-    // validate req
-    // right now, username and password are just unconstrained strings
-    await Joi.string().validateAsync(candidate.name);
-    await Joi.string().validateAsync(candidate.password);
+		// validate req
+		// right now, username and password are just unconstrained strings
+		await Joi.string().validateAsync(candidate.name);
+		await Joi.string().validateAsync(candidate.password);
 
-    await userSchema.validateAsync(candidate);
+		await userSchema.validateAsync(candidate);
 
-    const auth = getAuth();
+		const auth = getAuth();
 
-    const newUser = await auth.createUser({
-      displayName: candidate.name,
-      password: candidate.password,
-    });
+		const newUser = await auth.createUser({
+			displayName: candidate.name,
+			password: candidate.password
+		});
 
-    const newCookbooks = {
-      originals: {
-        owner: newUser.uid,
-        name: "Originals",
-        recipes: [],
-      },
-      favorites: {
-        owner: newUser.uid,
-        name: "Favorites",
-        recipes: [],
-      },
-    };
+		const newCookbooks = {
+			originals: {
+				owner: newUser.uid,
+				name: "Originals",
+				recipes: []
+			},
+			favorites: {
+				owner: newUser.uid,
+				name: "Favorites",
+				recipes: []
+			}
+		};
 
-    await cookbookSchema.validateAsync(newCookbooks.originals);
-    await cookbookSchema.validateAsync(newCookbooks.favorites);
+		await cookbookSchema.validateAsync(newCookbooks.originals);
+		await cookbookSchema.validateAsync(newCookbooks.favorites);
 
-    await db.collection("cookbooks").add(newCookbooks.originals);
-    await db.collection("cookbooks").add(newCookbooks.favorites);
+		await db.collection("cookbooks").add(newCookbooks.originals);
+		await db.collection("cookbooks").add(newCookbooks.favorites);
 
-    res.sendStatus(201);
-    return;
-  } catch (err) {
-    if (err.isJoi && err.name === "ValidationError") {
-      console.log(err);
-      res.status(400).send("invalid request");
-      return;
-    }
+		res.sendStatus(201);
+		return;
+	} catch (err) {
+		if (err.isJoi && err.name === "ValidationError") {
+			console.log(err);
+			res.status(400).send("invalid request");
+			return;
+		}
 
-    res.status(500).send("err");
-    console.log(err);
-    return;
-  }
+		res.status(500).send("err");
+		console.log(err);
+		return;
+	}
 });
 
 export default router;

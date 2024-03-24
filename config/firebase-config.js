@@ -4,9 +4,9 @@ import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 
 admin.initializeApp({
-  credential: applicationDefault(),
-  databaseURL: process.env.DATABASE_URL,
-  projectId: "cooking101-3b0b8",
+	credential: applicationDefault(),
+	databaseURL: process.env.DATABASE_URL,
+	projectId: "cooking101-3b0b8"
 });
 
 export { admin };
